@@ -1,1 +1,30 @@
-<p>navigation works!</p>
+<nav
+  class="navigation"
+  [ngClass]="mobileMode ? 'navigation--mobile' : 'navigation--desktop'"
+>
+  <a mat-button routerLink="/" routerLinkActive="router-link-active">Home</a>
+  <a mat-button routerLink="/skills" routerLinkActive="router-link-active"
+    >Skills</a
+  >
+  <a mat-button routerLink="/professional" routerLinkActive="router-link-active"
+    >Professional Experience</a
+  >
+  <a mat-button routerLink="/academic" routerLinkActive="router-link-active"
+    >Academic Experience</a
+  >
+  <a mat-button routerLink="/training" routerLinkActive="router-link-active"
+    >Training</a
+  >
+  <a
+    mat-button
+    routerLink="/certifications"
+    routerLinkActive="router-link-active"
+    >Certifications</a
+  >
+  <a mat-button routerLink="/hobbies" routerLinkActive="router-link-active"
+    >Hobbies</a
+  >
+  <a mat-button routerLink="/contacts" routerLinkActive="router-link-active"
+    >Contact</a
+  >
+</nav>

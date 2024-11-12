@@ -1,21 +1,23 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   afterNextRender,
   Component,
   inject,
+  OnDestroy,
   OnInit,
   Renderer2,
   RendererFactory2,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterOutlet } from '@angular/router';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 import { SeoService } from './shared/seo/seo.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-
+@AutoUnsubscribe()
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -32,7 +34,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'cv';
 
   hideSideMenu = true;
@@ -71,6 +73,8 @@ export class AppComponent implements OnInit {
         }
       });
   }
+
+  ngOnDestroy(): void {}
 
   addStructuredData() {
     const script = this.renderer.createElement('script');

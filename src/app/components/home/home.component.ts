@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SeoService } from '../../shared/seo/seo.service';
+import { CardReelComponent } from '../card-reel/card-reel.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [CardReelComponent],
   providers: [SeoService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

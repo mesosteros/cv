@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CardComponent } from '../card/card.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-card-reel',
   standalone: true,
-  imports: [CardComponent],
+  imports: [CommonModule, CardComponent],
   templateUrl: './card-reel.component.html',
   styleUrl: './card-reel.component.scss',
 })

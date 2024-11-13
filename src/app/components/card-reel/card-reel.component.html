@@ -1,0 +1,12 @@
+<div class="card-container">
+  <app-card
+    *ngFor="
+      let cardItem of cardItems;
+      index as i;
+      first as isFirst;
+      last as isLast;
+      trackBy: cardItem.id
+    "
+    [card]="cardItem"
+  ></app-card>
+</div>

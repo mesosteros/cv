@@ -19,20 +19,19 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { SeoService } from './shared/seo/seo.service';
 @AutoUnsubscribe()
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    NavigationComponent,
-    MatSidenavModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
-  providers: [SeoService],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        HeaderComponent,
+        FooterComponent,
+        NavigationComponent,
+        MatSidenavModule,
+        MatIconModule,
+        MatButtonModule,
+    ],
+    providers: [SeoService],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'cv';

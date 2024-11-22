@@ -6,11 +6,10 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe()
 @Component({
-  selector: 'app-card-reel',
-  standalone: true,
-  imports: [CommonModule, CardComponent],
-  templateUrl: './card-reel.component.html',
-  styleUrl: './card-reel.component.scss',
+    selector: 'app-card-reel',
+    imports: [CommonModule, CardComponent],
+    templateUrl: './card-reel.component.html',
+    styleUrl: './card-reel.component.scss'
 })
 export class CardReelComponent implements OnInit, OnDestroy {
   cardItems = [

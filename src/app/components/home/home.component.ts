@@ -3,12 +3,11 @@ import { SeoService } from '../../shared/seo/seo.service';
 import { CardReelComponent } from '../card-reel/card-reel.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CardReelComponent],
-  providers: [SeoService],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+    selector: 'app-home',
+    imports: [CardReelComponent],
+    providers: [SeoService],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
   constructor(private seoService: SeoService) {}

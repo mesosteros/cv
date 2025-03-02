@@ -2,9 +2,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   afterNextRender,
   Component,
+  Inject,
   inject,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   RendererFactory2,
 } from '@angular/core';
@@ -17,21 +19,22 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SeoService } from './shared/seo/seo.service';
+import { isPlatformServer } from '@angular/common';
 @AutoUnsubscribe()
 @Component({
-    selector: 'app-root',
-    imports: [
-        RouterOutlet,
-        HeaderComponent,
-        FooterComponent,
-        NavigationComponent,
-        MatSidenavModule,
-        MatIconModule,
-        MatButtonModule,
-    ],
-    providers: [SeoService],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  selector: 'app-root',
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    NavigationComponent,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
+  providers: [SeoService],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'cv';
@@ -42,7 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private responsive: BreakpointObserver,
-    private seoService: SeoService
+    private seoService: SeoService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     afterNextRender(() => {
       this.renderer = this.rendererFactory.createRenderer(null, null);
@@ -51,11 +55,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.seoService.updateMetaTags(
-      'Home',
-      'Front-End Tech Manager | Angular Expert | Delivering innovative web solutions',
-      'path/to/your/image.png'
-    );
+    if (isPlatformServer(this.platformId)) {
+      this.seoService.updateMetaTags(
+        'Home',
+        'Front-End Tech Manager | Angular Expert | Delivering innovative web solutions',
+        'path/to/your/image.png'
+      );
+    }
 
     this.responsive
       .observe([

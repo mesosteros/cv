@@ -1,17 +1,18 @@
-import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { CardReelComponent } from '../card-reel/card-reel.component';
 import { SeoService } from '../../shared/seo/seo.service';
-import { IntroComponent } from '../intro/intro.component';
+import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { CommonModule, isPlatformServer } from '@angular/common';
 
 @Component({
-  selector: 'app-home',
-  imports: [IntroComponent],
+  selector: 'app-skills',
+  imports: [CommonModule, CardReelComponent],
   providers: [SeoService],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './skills.component.html',
+  styleUrl: './skills.component.scss',
 })
-export class HomeComponent implements OnInit {
+export class SkillsComponent implements OnInit {
+  public skillsData: any;
   constructor(
     private seoService: SeoService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -21,14 +22,11 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     if (isPlatformServer(this.platformId)) {
       this.seoService.updateMetaTags(
-        'Home',
+        'Skills',
         'Front-End Tech Manager | Angular Expert | Delivering innovative web solutions',
         'path/to/your/image.png'
       );
     }
-    this.contentfulService
-      .getContent('skills')
-      .subscribe((data) => console.log(data));
-    // this.contentfulService.logContent('page');
+    this.skillsData = this.contentfulService.getContent('skills');
   }
 }

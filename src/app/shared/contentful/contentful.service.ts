@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as contentful from 'contentful';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs/Observable';
+import { from, map, Observable } from 'rxjs';
 import { marked } from 'marked';
 
 @Injectable({
@@ -16,13 +16,22 @@ export class ContentfulService {
 
   // console logs a response for debugging
   logContent(contentId: string) {
-    this.client.getEntry(contentId).then((entry) => console.log(entry));
+    return this.client
+      .getEntries(Object.assign({ content_type: 'landingPage' }))
+      .then((entry) => console.log(entry.items));
   }
 
   // retrieves content mapped to its data fields
-  getContent(contentId: string) {
-    const promise = this.client.getEntry(contentId);
-    return Observable.fromPromise(promise).map((entry: any) => entry.fields);
+  getContent(contentId: string): Observable<any> {
+    const promise = this.client.getEntry(
+      Object.assign({ content_type: contentId })
+    );
+    return from(promise).pipe(
+      map((entry: any) => {
+        console.log(entry);
+        return entry.fields;
+      })
+    );
   }
 
   // convert markdown string to

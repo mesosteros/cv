@@ -5,7 +5,14 @@
     isDesktop: isDesktop$ | async
   } as state"
 >
+  <app-loading-spinner
+    *ngIf="isLoading"
+    [message]="'Loading content...'"
+    mode="fullscreen"
+  >
+  </app-loading-spinner>
   <div
+    *ngIf="!isLoading"
     [ngClass]="{
       'text--mobile': state.isMobile,
       'text--desktop': state.isDesktop

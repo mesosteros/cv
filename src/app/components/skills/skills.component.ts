@@ -27,6 +27,6 @@ export class SkillsComponent implements OnInit {
         'path/to/your/image.png'
       );
     }
-    this.skillsData = this.contentfulService.getContent('skills');
+    this.skillsData = this.contentfulService.getEntries('skills');
   }
 }

@@ -14,8 +14,7 @@ import { IntroComponent } from '../intro/intro.component';
 export class HomeComponent implements OnInit {
   constructor(
     private seoService: SeoService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private contentfulService: ContentfulService
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -26,9 +25,5 @@ export class HomeComponent implements OnInit {
         'path/to/your/image.png'
       );
     }
-    this.contentfulService
-      .getContent('skills')
-      .subscribe((data) => console.log(data));
-    // this.contentfulService.logContent('page');
   }
 }

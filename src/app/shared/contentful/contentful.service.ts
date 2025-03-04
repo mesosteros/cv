@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as contentful from 'contentful';
 import { environment } from '../../../environments/environment';
-import { from, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,24 +12,13 @@ export class ContentfulService {
   });
   constructor() {}
 
-  // console logs a response for debugging
-  logContent(contentId: string) {
-    return this.client
-      .getEntries(Object.assign({ content_type: 'landingPage' }))
-      .then((entry) => console.log(entry.items));
+  // retrieves content mapped to its data fields
+  getEntry<T>(entryId: string): Promise<any> {
+    return this.client.getEntry(entryId);
   }
 
   // retrieves content mapped to its data fields
-  getContent(contentId: string): Observable<any> {
-    const promise = this.client.getEntries(
-      Object.assign({ content_type: contentId })
-    );
-
-    return from(promise).pipe(
-      map((entry: any) => {
-        console.log(entry.items);
-        return entry.items;
-      })
-    );
+  getEntries(contentId: string): Promise<any> {
+    return this.client.getEntries(Object.assign({ content_type: contentId }));
   }
 }

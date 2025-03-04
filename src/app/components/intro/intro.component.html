@@ -1,1 +1,15 @@
-<p>intro works!</p>
+<div
+  id="introText"
+  *ngIf="{
+    isMobile: isMobile$ | async,
+    isDesktop: isDesktop$ | async
+  } as state"
+>
+  <div
+    [ngClass]="{
+      'text--mobile': state.isMobile,
+      'text--desktop': state.isDesktop
+    }"
+    [innerHTML]="introText"
+  ></div>
+</div>

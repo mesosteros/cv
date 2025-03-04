@@ -10,6 +10,7 @@ export class ContentfulService {
     space: environment.contentful.spaceId,
     accessToken: environment.contentful.token,
   });
+  
   constructor() {}
 
   // retrieves content mapped to its data fields

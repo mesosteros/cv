@@ -26,18 +26,22 @@
     }
   }
 
-  &-soft {
-    &-cloud {
-      display: flex;
+  .other-skills {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    @media screen and (max-width: 1919px) {
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
     }
   }
-}
 
-app-technical-skills,
-app-soft-skills,
-app-language-skills {
-  width: 100%;
+  &-language {
+    width: 50%;
+  }
+
+  &-soft {
+    &-cloud {
+      width: 50%;
+    }
+  }
 }

@@ -1,8 +1,8 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
-import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -14,16 +14,24 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
+  server.use((req, res, next) => {
+    res.setHeader('X-Robots-Tag', 'all');
+    next();
+  });
+
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: 'index.html',
-  }));
+  server.get(
+    '**',
+    express.static(browserDistFolder, {
+      maxAge: '1y',
+      index: 'index.html',
+    })
+  );
 
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {

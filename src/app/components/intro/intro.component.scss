@@ -1,13 +1,13 @@
 #introText {
   .text {
     &--desktop {
-      padding-left: 50rem;
-      padding-right: 50rem;
+      padding-left: 25%;
+      padding-right: 25%;
     }
 
     &--mobile {
-      padding-left: 4rem;
-      padding-right: 4rem;
+      padding-left: 10%;
+      padding-right: 10%;
     }
   }
 }

@@ -5,23 +5,21 @@ import {
   NgxDateFormat,
   NgxTimelineEvent,
   NgxTimelineEventChangeSide,
-  NgxTimelineModule,
 } from '@frxjs/ngx-timeline';
 import { Observable } from 'rxjs';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { ResponsiveService } from '../../shared/responsive/responsive.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { TimelineComponent } from '../timeline/timeline.component';
 
 @Component({
   selector: 'app-professional',
-  imports: [CommonModule, LoadingSpinnerComponent, NgxTimelineModule],
+  imports: [CommonModule, LoadingSpinnerComponent, TimelineComponent],
   templateUrl: './professional.component.html',
   styleUrl: './professional.component.scss',
 })
 export class ProfessionalComponent implements OnInit {
-  public isMobile$!: Observable<boolean>;
-  public isDesktop$!: Observable<boolean>;
   public isLoading: boolean = true;
   public mobileMode = false;
   public professionalData: any;
@@ -34,14 +32,10 @@ export class ProfessionalComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private contentfulService: ContentfulService,
-    private responsiveService: ResponsiveService,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
-
     this.loadingService.show();
 
     this.contentfulService

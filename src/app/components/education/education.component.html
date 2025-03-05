@@ -6,33 +6,5 @@
 </app-loading-spinner>
 <div class="timeline-page">
   <h1>Academic Experience</h1>
-
-  <ngx-timeline
-    [events]="events"
-    [langCode]="'en'"
-    [enableAnimation]="true"
-    [reverseOrder]="true"
-    [changeSide]="timelineSide"
-    [periodCustomTemplate]="periodCustomTemplate"
-    [dateInstantCustomTemplate]="dateInstantCustomTemplate"
-    [eventDescriptionCustomTemplate]="eventDescriptionCustomTemplate"
-    (clickEmitter)="handleClick($event)"
-  ></ngx-timeline>
-  <ng-template #periodCustomTemplate let-period="period" let-index="index">
-    <div class="period-inner-container">
-      <span class="end-date-label">{{
-        findCorrespondingEndDate(period?.firstDate) | ngxdate : ngxDateFormat
-      }}</span>
-    </div>
-  </ng-template>
-
-  <ng-template #dateInstantCustomTemplate let-index="index" let-item="item">
-    <span class="end-date-label"></span>
-  </ng-template>
-
-  <ng-template #eventDescriptionCustomTemplate let-event="event">
-    <div
-      [innerHTML]="convertToHtml(event.eventInfo?.description.description)"
-    ></div>
-  </ng-template>
+  <app-timeline [events]="events"></app-timeline>
 </div>

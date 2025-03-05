@@ -1,30 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
   NgxDateFormat,
   NgxTimelineEvent,
   NgxTimelineEventChangeSide,
-  NgxTimelineModule,
 } from '@frxjs/ngx-timeline';
-import { Observable } from 'rxjs';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { LoadingService } from '../../shared/loading/loading.service';
-import { ResponsiveService } from '../../shared/responsive/responsive.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { TimelineComponent } from '../timeline/timeline.component';
 
 @Component({
   selector: 'app-education',
-  imports: [CommonModule, LoadingSpinnerComponent, NgxTimelineModule],
+  imports: [CommonModule, LoadingSpinnerComponent, TimelineComponent],
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',
 })
 export class EducationComponent implements OnInit {
-  public isMobile$!: Observable<boolean>;
-  public isDesktop$!: Observable<boolean>;
   public isLoading: boolean = true;
   public mobileMode = false;
-  public professionalData: any;
+  public educationData: any;
   public events: NgxTimelineEvent[] = [];
   public timelineSide: NgxTimelineEventChangeSide =
     NgxTimelineEventChangeSide.ALL;
@@ -32,27 +28,21 @@ export class EducationComponent implements OnInit {
   public ngxDateFormat: NgxDateFormat = NgxDateFormat.MONTH_YEAR;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
     private contentfulService: ContentfulService,
-    private responsiveService: ResponsiveService,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
-    this.isMobile$ = this.responsiveService.isMobile$;
-    this.isDesktop$ = this.responsiveService.isDesktop$;
-
     this.loadingService.show();
 
     this.contentfulService
       .getEntries('landingPage')
       .then((data: any) => {
-        console.log(data.items);
-        const professionalData = data.items
+        const educationData = data.items
           .filter((item: any) => item.fields.title === 'Academic Experience')
-          .map((professionalData: any) => professionalData.fields);
-        this.professionalData = professionalData[0];
-        const listExperience = this.professionalData.sections.map(
+          .map((educationData: any) => educationData.fields);
+        this.educationData = educationData[0];
+        const listExperience = this.educationData.sections.map(
           (section: any) => section.fields
         );
         const events = listExperience.map(
@@ -86,7 +76,7 @@ export class EducationComponent implements OnInit {
         );
         this.events = events;
       })
-      .catch((error) => (this.professionalData = []))
+      .catch((error) => (this.educationData = []))
       .finally(() => {
         this.loadingService.hide();
         this.isLoading = false;

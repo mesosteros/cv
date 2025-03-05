@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import { SeoService } from '../../shared/seo/seo.service';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { CommonModule, isPlatformServer } from '@angular/common';
@@ -14,10 +20,12 @@ import {
   providers: [SeoService],
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkillsComponent implements OnInit {
   public softSkillsData: any;
   public techSkillsData: any;
+  public languageSkillsData: any;
 
   options: CloudOptions = {
     overflow: false,
@@ -62,5 +70,29 @@ export class SkillsComponent implements OnInit {
           skillA.title.localeCompare(skillB.title)
         );
     });
+
+    this.contentfulService.getEntries('languageSkill').then((entries: any) => {
+      this.languageSkillsData = entries.items
+        .map((skill: any) => skill.fields)
+        .sort(
+          (skillA: any, skillB: any) => skillB.proficiency - skillA.proficiency
+        );
+    });
+  }
+
+  getSkillLevelString(level: number): string {
+    if (level === 5) {
+      return 'Native';
+    } else if (level === 4) {
+      return 'Fluent';
+    } else if (level === 3) {
+      return 'Advanced';
+    } else if (level === 2) {
+      return 'Intermediate';
+    } else if (level === 1) {
+      return 'Basic';
+    } else {
+      return 'Unknown';
+    }
   }
 }

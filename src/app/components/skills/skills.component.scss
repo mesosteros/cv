@@ -11,31 +11,26 @@
 
   &-blocks {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10rem;
-
-    @media screen and (max-width: 1439px) {
-      flex-direction: column;
-      gap: 0;
-    }
+    gap: 2rem;
   }
 
   &-technical {
     &-cards {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      gap: 0.3125rem; /* 5px / 16px = 0.3125rem */
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 1rem;
       padding-top: 4rem;
-      width: 40%;
+
       @media screen and (max-width: 1439px) {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        width: 100%;
+        max-width: 2rem;
+        max-height: 2rem;
       }
     }
+
     &-card {
       display: flex;
       object-fit: cover;
@@ -59,13 +54,44 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 40%;
+    }
+  }
 
-      @media screen and (max-width: 1439px) {
-        width: 100%;
-        max-width: 245px;
-        justify-content: flex-end;
-      }
+  .language-skills {
+    width: 300px;
+    font-family: sans-serif;
+  }
+
+  .language-skill {
+    margin-bottom: 10px;
+  }
+
+  .language-skill-name {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .language-skill-bar {
+    background-color: #f0f0f0;
+    height: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    flex-grow: 1; /* Allow skill-bar to take up available space */
+    margin-right: 10px; /* Add some space between bar and text */
+    min-width: 260px;
+
+    &--container {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .language-skill-level {
+    background: linear-gradient(to right, lightblue, #1976d2);
+    height: 100%;
+    transition: width 0.5s ease;
+    &--text {
+      font-size: 0.8em; /* Adjust font size as needed */
     }
   }
 }

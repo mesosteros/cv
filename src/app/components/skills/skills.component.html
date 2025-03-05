@@ -10,6 +10,25 @@
         />
       </div>
     </div>
+    <div class="skills-language">
+      <div class="language-skills">
+        <div class="language-skill" *ngFor="let language of languageSkillsData">
+          <span class="language-skill-name">{{ language.language }}</span>
+          <div class="language-skill-bar--container">
+            <div class="language-skill-bar">
+              <div
+                class="language-skill-level"
+                [attr.data-level]="language.proficiency"
+                [style.width]="language.proficiency * 20 + '%'"
+              ></div>
+            </div>
+            <span class="language-skill-level--text">{{
+              getSkillLevelString(language.proficiency)
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="skills-soft-cloud">
       <ng-tag-cloud
         [data]="wordCloudData"

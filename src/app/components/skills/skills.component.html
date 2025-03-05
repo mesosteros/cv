@@ -1,5 +1,14 @@
 <div class="skills">
   <h1>Skills</h1>
-  <p *ngFor="let skill of skillsData">{{ skill.title }}</p>
-  <app-card-reel></app-card-reel>
+  <div>
+    <ng-tag-cloud
+      [data]="data"
+      [width]="options.width"
+      [height]="options.height"
+      [overflow]="options.overflow"
+      [randomizeAngle]="true"
+      [draggable]="true"
+    >
+    </ng-tag-cloud>
+  </div>
 </div>

@@ -27,6 +27,10 @@ export class SkillsComponent implements OnInit {
         'path/to/your/image.png'
       );
     }
-    this.skillsData = this.contentfulService.getEntries('skills');
+
+    this.contentfulService.getEntries('skills').then((entries: any) => {
+      this.skillsData = entries.items.map((skill: any) => skill.fields);
+      console.log(this.skillsData[0].title);
+    });
   }
 }

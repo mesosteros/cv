@@ -10,6 +10,10 @@ import { CommonModule, isPlatformServer } from '@angular/common';
 import { TechnicalSkillsComponent } from '../technical-skills/technical-skills.component';
 import { SoftSkillsComponent } from '../soft-skills/soft-skills.component';
 import { LanguageSkillsComponent } from '../language-skills/language-skills.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { LoadingService } from '../../shared/loading/loading.service';
+import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { CloudData } from 'angular-tag-cloud-module';
 
 @Component({
   selector: 'app-skills',
@@ -18,16 +22,26 @@ import { LanguageSkillsComponent } from '../language-skills/language-skills.comp
     TechnicalSkillsComponent,
     SoftSkillsComponent,
     LanguageSkillsComponent,
+    LoadingSpinnerComponent,
   ],
-  providers: [SeoService],
+  providers: [SeoService, ContentfulService],
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SkillsComponent implements OnInit {
+  loadedData = 0;
+  public isLoading: boolean = true;
+  public techSkillsData: any = [];
+  public languageSkillsData: any = [];
+  public softSkillsData: any = [];
+  public wordCloudData: CloudData[] = [];
+
   constructor(
     private seoService: SeoService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private loadingService: LoadingService,
+    private contentfulService: ContentfulService
   ) {}
 
   ngOnInit() {
@@ -38,5 +52,56 @@ export class SkillsComponent implements OnInit {
         'path/to/your/image.png'
       );
     }
+
+    this.fetchData();
+  }
+  private async fetchData() {
+    this.loadingService.show();
+    try {
+      const [techData, langData, softData] = await Promise.all([
+        this.contentfulService.getEntries('skills'),
+        this.contentfulService.getEntries('languageSkill'),
+        this.contentfulService.getEntries('softSkills'),
+      ]);
+      this.getTechnicalSkills(techData);
+      this.getLanguageSkills(langData);
+      this.getSoftSkills(softData);
+    } catch (error) {
+      console.error('Error: ', error);
+    } finally {
+      this.loadingService.hide();
+      this.isLoading = false;
+    }
+  }
+
+  private getTechnicalSkills(techData: any) {
+    this.techSkillsData = techData.items
+      .map((skill: any) => skill.fields)
+      .sort((skillA: any, skillB: any) =>
+        skillA.title.localeCompare(skillB.title)
+      );
+  }
+
+  private getLanguageSkills(langData: any) {
+    this.languageSkillsData = langData.items
+      .map((skill: any) => skill.fields)
+      .sort(
+        (skillA: any, skillB: any) => skillB.proficiency - skillA.proficiency
+      );
+  }
+
+  private getSoftSkills(softData: any) {
+    this.softSkillsData = softData.items.map((skill: any) => skill.fields);
+    this.wordCloudData = this.softSkillsData.map((skill: any) => {
+      const skillCloud = {
+        text: skill.title,
+        weight: skill.weight,
+        tooltip: skill.tooltip ? skill.tooltip : null,
+        color: skill.color
+          ? skill.color
+          : '#' + Math.floor(Math.random() * 16777215).toString(16),
+      };
+      return skillCloud;
+    });
   }
 }

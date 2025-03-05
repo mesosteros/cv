@@ -14,6 +14,7 @@ import { TimelineComponent } from '../timeline/timeline.component';
 @Component({
   selector: 'app-education',
   imports: [CommonModule, LoadingSpinnerComponent, TimelineComponent],
+  providers: [ContentfulService],
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',
 })

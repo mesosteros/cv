@@ -1,27 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { ContentfulService } from '../../shared/contentful/contentful.service';
 
 @Component({
   selector: 'app-language-skills',
   imports: [CommonModule],
+  providers: [ContentfulService],
   templateUrl: './language-skills.component.html',
   styleUrl: './language-skills.component.scss',
 })
 export class LanguageSkillsComponent implements OnInit {
-  public languageSkillsData: any;
+  @Input() languageSkillsData: any = [];
 
-  constructor(private contentfulService: ContentfulService) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.contentfulService.getEntries('languageSkill').then((entries: any) => {
-      this.languageSkillsData = entries.items
-        .map((skill: any) => skill.fields)
-        .sort(
-          (skillA: any, skillB: any) => skillB.proficiency - skillA.proficiency
-        );
-    });
-  }
+  ngOnInit() {}
 
   getSkillLevelString(level: number): string {
     if (level === 5) {

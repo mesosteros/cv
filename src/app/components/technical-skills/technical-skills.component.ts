@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-technical-skills',
@@ -9,18 +8,9 @@ import { ContentfulService } from '../../shared/contentful/contentful.service';
   styleUrl: './technical-skills.component.scss',
 })
 export class TechnicalSkillsComponent implements OnInit {
-  public techSkillsData: any;
+  @Input() techSkillsData: any = [];
 
-  constructor(private contentfulService: ContentfulService) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.contentfulService.getEntries('skills').then((entries: any) => {
-      this.techSkillsData = entries.items
-        .map((skill: any) => skill.fields)
-        .sort((skillA: any, skillB: any) =>
-          skillA.title.localeCompare(skillB.title)
-        );
-      console.log(this.techSkillsData);
-    });
-  }
+  ngOnInit() {}
 }

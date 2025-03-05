@@ -39,16 +39,17 @@ export class SkillsComponent implements OnInit {
       );
     }
 
-    this.contentfulService.getEntries('skills').then((entries: any) => {
+    this.contentfulService.getEntries('softSkills').then((entries: any) => {
+      console.log(entries);
       this.skillsData = entries.items.map((skill: any) => skill.fields);
       this.data = this.skillsData.map((skill: any) => {
         const skillCloud = {
           text: skill.title,
           weight: skill.weight,
-          link: skill.link ? skill.link : null,
           tooltip: skill.tooltip ? skill.tooltip : null,
-          external: skill.link ? true : false,
-          color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+          color: skill.color
+            ? skill.color
+            : '#' + Math.floor(Math.random() * 16777215).toString(16),
         };
         return skillCloud;
       });

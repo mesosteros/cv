@@ -16,13 +16,14 @@ import {
   styleUrl: './skills.component.scss',
 })
 export class SkillsComponent implements OnInit {
-  public skillsData: any;
+  public softSkillsData: any;
+  public techSkillsData: any;
 
   options: CloudOptions = {
     overflow: false,
   };
 
-  data: CloudData[] = [];
+  wordCloudData: CloudData[] = [];
 
   constructor(
     private seoService: SeoService,
@@ -40,9 +41,8 @@ export class SkillsComponent implements OnInit {
     }
 
     this.contentfulService.getEntries('softSkills').then((entries: any) => {
-      console.log(entries);
-      this.skillsData = entries.items.map((skill: any) => skill.fields);
-      this.data = this.skillsData.map((skill: any) => {
+      this.softSkillsData = entries.items.map((skill: any) => skill.fields);
+      this.wordCloudData = this.softSkillsData.map((skill: any) => {
         const skillCloud = {
           text: skill.title,
           weight: skill.weight,
@@ -53,7 +53,14 @@ export class SkillsComponent implements OnInit {
         };
         return skillCloud;
       });
-      console.log(this.skillsData[0].title);
+    });
+
+    this.contentfulService.getEntries('skills').then((entries: any) => {
+      this.techSkillsData = entries.items
+        .map((skill: any) => skill.fields)
+        .sort((skillA: any, skillB: any) =>
+          skillA.title.localeCompare(skillB.title)
+        );
     });
   }
 }

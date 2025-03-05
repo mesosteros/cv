@@ -73,7 +73,7 @@ export class ProfessionalComponent implements OnInit {
               startDate: experience.startDate,
               endDate: experience.endDate,
             };
-            console.log(index);
+
             const processedData = {
               timestamp: new Date(experience.startDate),
               title: `${experience.title} - ${experience.role}`,
@@ -94,10 +94,6 @@ export class ProfessionalComponent implements OnInit {
 
   handleClick(event: any) {
     console.log(event);
-  }
-
-  logIt(whatever: any) {
-    console.log('whatever: ', whatever);
   }
 
   findCorrespondingEndDate(startDate: any) {

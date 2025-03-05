@@ -1,0 +1,37 @@
+.skills-technical {
+  &-cards {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 4rem;
+    width: 100%;
+
+    @media screen and (max-width: 1439px) {
+      max-width: 2rem;
+      max-height: 2rem;
+    }
+
+    @media screen and (max-width: 1919px) {
+      flex-direction: column;
+    }
+  }
+
+  &-card {
+    display: flex;
+    object-fit: cover;
+    align-items: center;
+  }
+
+  &-logo {
+    max-width: 7rem;
+    max-height: 7rem;
+    object-fit: cover;
+
+    @media screen and (max-width: 1439px) {
+      max-width: 2rem;
+      max-height: 2rem;
+    }
+  }
+}

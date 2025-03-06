@@ -24,7 +24,6 @@ export class ProfessionalComponent implements OnInit {
   public events: NgxTimelineEvent[] = [];
   public timelineSide: NgxTimelineEventChangeSide =
     NgxTimelineEventChangeSide.ALL;
-
   public ngxDateFormat: NgxDateFormat = NgxDateFormat.MONTH_YEAR;
 
   constructor(
@@ -59,11 +58,17 @@ export class ProfessionalComponent implements OnInit {
               experience.endDate = formattedDate;
             }
 
+            const experienceImage = {
+              altText: `${experience?.logo?.fields.title} Logo`,
+              url: experience?.logo?.fields.file.url,
+            };
+
             const eventDescription = {
               location: experience.location,
               description: experience.description,
               startDate: experience.startDate,
               endDate: experience.endDate,
+              image: experienceImage,
             };
 
             const processedData = {
@@ -103,5 +108,21 @@ export class ProfessionalComponent implements OnInit {
 
   convertToHtml(text: any) {
     return documentToHtmlString(text);
+  }
+
+  private async getImage(wrapperId: string) {
+    this.loadingService.show();
+
+    return this.contentfulService
+      .getEntry(wrapperId)
+      .then((experienceImage: any) => {
+        this.loadingService.hide();
+        this.isLoading = false;
+        return {
+          altText: experienceImage.fields.altText,
+          url: experienceImage.fields.asset.fields.file.url,
+        };
+      })
+      .catch((error) => console.error('Error loading image: ', error));
   }
 }

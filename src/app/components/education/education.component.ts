@@ -59,11 +59,17 @@ export class EducationComponent implements OnInit {
               experience.endDate = formattedDate;
             }
 
+            const experienceImage = {
+              altText: `${experience?.logo?.fields.title} Logo`,
+              url: experience?.logo?.fields.file.url,
+            };
+
             const eventDescription = {
               location: experience.location,
               description: experience.description,
               startDate: experience.startDate,
               endDate: experience.endDate,
+              image: experienceImage,
             };
 
             const processedData = {

@@ -1,5 +1,12 @@
 <div class="skills-technical-cards">
-  <div class="skills-technical-card" *ngFor="let skill of techSkillsData">
+  <div
+    class="skills-technical-card"
+    *ngFor="let skill of techSkillsData; let i = index"
+    [ngClass]="{
+      'skills-technical-card--left': i % 2 === 0,
+      'skills-technical-card--right': i % 2 !== 0
+    }"
+  >
     <img
       class="skills-technical-logo"
       src="{{ skill.image.fields.asset.fields.file.url }}"

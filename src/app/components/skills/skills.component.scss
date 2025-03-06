@@ -6,7 +6,9 @@
 
   &-header {
     width: 100%;
-    text-align: center;
+    h1 {
+      text-align: center;
+    }
   }
 
   &-blocks {
@@ -20,28 +22,43 @@
   &-technical {
     &-cards {
       width: 100%;
-      @media screen and (max-width: 1919px) {
-        flex-direction: column;
-      }
     }
   }
 
   .other-skills {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     padding-top: 2rem;
     @media screen and (max-width: 1919px) {
       flex-direction: column;
+    }
+
+    @media screen and (max-width: 1439px) {
+      justify-content: center;
+      align-items: center;
     }
   }
 
   &-language {
     width: 50%;
+    @media screen and (max-width: 1439px) {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   &-soft {
     &-cloud {
       width: 50%;
+      @media screen and (max-width: 1439px) {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 }

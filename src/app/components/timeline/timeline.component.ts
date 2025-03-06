@@ -30,7 +30,7 @@ export class TimelineComponent implements OnInit {
   ngOnInit() {}
 
   handleClick(event: any) {
-    console.log(event);
+    return;
   }
 
   findCorrespondingEndDate(startDate: any) {

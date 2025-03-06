@@ -85,7 +85,7 @@ export class EducationComponent implements OnInit {
   }
 
   handleClick(event: any) {
-    console.log(event);
+    return;
   }
 
   findCorrespondingEndDate(startDate: any) {

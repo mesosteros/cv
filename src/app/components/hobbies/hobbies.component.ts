@@ -49,7 +49,6 @@ export class HobbiesComponent implements OnInit {
             };
             return hobbyObj;
           });
-        console.log(this.hobbiesData);
       })
       .catch((error) => (this.hobbiesData = []))
       .finally(() => {

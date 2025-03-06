@@ -85,7 +85,7 @@ export class ProfessionalComponent implements OnInit {
   }
 
   handleClick(event: any) {
-    console.log(event);
+    return;
   }
 
   findCorrespondingEndDate(startDate: any) {

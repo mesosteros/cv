@@ -1,0 +1,10 @@
+<app-loading-spinner
+  *ngIf="isLoading"
+  [message]="'Loading content...'"
+  mode="fullscreen"
+>
+</app-loading-spinner>
+<div class="timeline-page">
+  <h1>Professional Experience</h1>
+  <app-timeline [events]="events"></app-timeline>
+</div>

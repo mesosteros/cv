@@ -1,0 +1,54 @@
+.skills-technical {
+  &-cards {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+
+    @media screen and (min-width: 701px) and (max-width: 1439px) {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+    }
+
+    @media screen and (max-width: 700px) {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
+    }
+    @media screen and (max-width: 370px) {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  &-card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    @media screen and (max-width: 700px) {
+      &--left {
+        justify-content: flex-end !important;
+      }
+
+      &--right {
+        justify-content: flex-start !important;
+      }
+    }
+    @media screen and (max-width: 370px) {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &-logo {
+    max-width: 7rem;
+    max-height: 7rem;
+    object-fit: cover;
+
+    @media screen and (max-width: 1439px) {
+      max-width: 4rem;
+      max-height: 4rem;
+    }
+  }
+}

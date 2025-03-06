@@ -1,0 +1,64 @@
+.skills {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &-header {
+    width: 100%;
+    h1 {
+      text-align: center;
+    }
+  }
+
+  &-blocks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &-technical {
+    &-cards {
+      width: 100%;
+    }
+  }
+
+  .other-skills {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 0.5rem;
+    @media screen and (max-width: 1919px) {
+      flex-direction: column;
+    }
+
+    @media screen and (max-width: 700px) {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &-language {
+    width: 50%;
+    @media screen and (max-width: 700px) {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &-soft {
+    &-cloud {
+      width: 100%;
+      padding-top: 2rem;
+      flex-wrap: wrap;
+
+      @media screen and (min-width: 1900px) {
+        width: 50%;
+      }
+    }
+  }
+}

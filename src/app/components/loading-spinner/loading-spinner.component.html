@@ -1,0 +1,12 @@
+<div
+  class="spinner-container"
+  [ngClass]="{ fullscreen: mode === 'fullscreen' }"
+>
+  <mat-spinner
+    [diameter]="diameter"
+    [strokeWidth]="strokeWidth"
+    [color]="color"
+  >
+  </mat-spinner>
+  <p *ngIf="message" class="message">{{ message }}</p>
+</div>

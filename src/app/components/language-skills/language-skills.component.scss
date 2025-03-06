@@ -1,0 +1,39 @@
+.language {
+  &-skills {
+    width: 300px;
+    font-family: sans-serif;
+  }
+
+  &-skill {
+    margin-bottom: 10px;
+  }
+
+  &-skill-name {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  &-skill-bar {
+    background-color: #f0f0f0;
+    height: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    flex-grow: 1; /* Allow skill-bar to take up available space */
+    margin-right: 10px; /* Add some space between bar and text */
+    min-width: 260px;
+
+    &--container {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &-skill-level {
+    background: linear-gradient(to right, lightblue, #1976d2);
+    height: 100%;
+    transition: width 0.5s ease;
+    &--text {
+      font-size: 0.8em; /* Adjust font size as needed */
+    }
+  }
+}

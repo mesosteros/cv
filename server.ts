@@ -1,9 +1,10 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
-import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import bootstrap from './src/main.server';
+import xmlbuilder from 'xmlbuilder';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -14,20 +15,52 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
+  const routes = [
+    '/',
+    '/skills',
+    '/professional',
+    '/academic',
+    '/training',
+    '/hobbies',
+  ];
+
+  server.get('/sitemap.xml', (req, res) => {
+    const root = xmlbuilder.create('urlset', {
+      version: '1.0',
+      encoding: 'UTF-8',
+    });
+    root.att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+
+    routes.forEach((route) => {
+      const url = root.ele('url');
+      url.ele('loc', `https://www.carlosesantos.com${route}`);
+    });
+
+    res.header('Content-Type', 'application/xml');
+    res.send(root.end({ pretty: true }));
+  });
+
+  server.use((req, res, next) => {
+    res.setHeader('X-Robots-Tag', 'all');
+    next();
+  });
+
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: 'index.html',
-  }));
+  server.get(
+    '**',
+    express.static(browserDistFolder, {
+      maxAge: '1y',
+      index: 'index.html',
+    })
+  );
 
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
+    const canonicalUrl = `${protocol}://${headers.host}${originalUrl}`;
 
     commonEngine
       .render({
@@ -37,7 +70,13 @@ export function app(): express.Express {
         publicPath: browserDistFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
-      .then((html) => res.send(html))
+      .then((html) => {
+        html = html.replace(
+          /<link rel="canonical" href="[^"]*">/i,
+          `<link rel="canonical" href="${canonicalUrl}" />`
+        );
+        return res.send(html);
+      })
       .catch((err) => next(err));
   });
 

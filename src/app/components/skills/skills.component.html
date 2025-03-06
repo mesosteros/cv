@@ -1,0 +1,28 @@
+<app-loading-spinner
+  *ngIf="isLoading"
+  [message]="'Loading content...'"
+  mode="fullscreen"
+>
+</app-loading-spinner>
+<div class="skills">
+  <div class="skills-header">
+    <h1>Skills</h1>
+  </div>
+  <div class="skills-blocks">
+    <div class="skills-technical-cards">
+      <app-technical-skills
+        [techSkillsData]="techSkillsData"
+      ></app-technical-skills>
+    </div>
+    <div class="other-skills">
+      <div class="skills-language">
+        <app-language-skills
+          [languageSkillsData]="languageSkillsData"
+        ></app-language-skills>
+      </div>
+      <div class="skills-soft-cloud">
+        <app-soft-skills [softSkillsData]="softSkillsData"></app-soft-skills>
+      </div>
+    </div>
+  </div>
+</div>

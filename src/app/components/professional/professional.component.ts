@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
@@ -10,11 +10,12 @@ import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { TimelineComponent } from '../timeline/timeline.component';
+import { SeoService } from '../../shared/seo/seo.service';
 
 @Component({
   selector: 'app-professional',
   imports: [CommonModule, LoadingSpinnerComponent, TimelineComponent],
-  providers: [ContentfulService],
+  providers: [ContentfulService, SeoService],
   templateUrl: './professional.component.html',
   styleUrl: './professional.component.scss',
 })
@@ -27,12 +28,17 @@ export class ProfessionalComponent implements OnInit {
   public ngxDateFormat: NgxDateFormat = NgxDateFormat.MONTH_YEAR;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private seoService: SeoService,
     private contentfulService: ContentfulService,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
     this.loadingService.show();
 
     this.contentfulService

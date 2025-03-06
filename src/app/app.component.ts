@@ -2,11 +2,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   afterNextRender,
   Component,
-  Inject,
   inject,
   OnDestroy,
   OnInit,
-  PLATFORM_ID,
   Renderer2,
   RendererFactory2,
 } from '@angular/core';
@@ -18,8 +16,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { SeoService } from './shared/seo/seo.service';
-import { isPlatformServer } from '@angular/common';
+
 @AutoUnsubscribe()
 @Component({
   selector: 'app-root',
@@ -32,22 +29,16 @@ import { isPlatformServer } from '@angular/common';
     MatIconModule,
     MatButtonModule,
   ],
-  providers: [SeoService],
+  providers: [],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'cv';
-
   hideSideMenu = true;
   private renderer = inject(Renderer2);
   private rendererFactory = inject(RendererFactory2);
 
-  constructor(
-    private responsive: BreakpointObserver,
-    private seoService: SeoService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
+  constructor(private responsive: BreakpointObserver) {
     afterNextRender(() => {
       this.renderer = this.rendererFactory.createRenderer(null, null);
       this.addStructuredData();
@@ -55,14 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (isPlatformServer(this.platformId)) {
-      this.seoService.updateMetaTags(
-        'Home',
-        'Front-End Tech Manager | Angular Expert | Delivering innovative web solutions',
-        'path/to/your/image.png'
-      );
-    }
-
     this.responsive
       .observe([
         Breakpoints.HandsetPortrait,
@@ -86,12 +69,12 @@ export class AppComponent implements OnInit, OnDestroy {
     script.type = 'application/ld+json';
     script.text = `
     {
-      "@context": "http://carlosesantos.com",
+      "@context": "http://www.carlosesantos.com",
       "@type": "Personal",
-      "name": "Carlos Ermida Santos",
-      "url": "https://carlosesantos.com",
-      "logo": "https://carlosesantos.com/logo.png",
-      "description": "Front-End Tech Manager | Angular Expert | Delivering innovative web solutions"
+      "name": "Carlos Santos - Front-End Tech Manager | Angular Expert",
+      "url": "https://www.carlosesantos.com",
+      "logo": "https://www.carlosesantos.com/favicon.ico",
+      "description": "Tech Manager (10+ yrs) specializing in Angular. Leads teams, architects solutions, and mentors development in JavaScript frameworks"
     }`;
 
     this.renderer.appendChild(document.head, script);

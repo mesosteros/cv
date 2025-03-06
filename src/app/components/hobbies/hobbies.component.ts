@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDAndD } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -12,11 +12,12 @@ import {
   faFilm,
   faBook,
 } from '@fortawesome/free-solid-svg-icons';
+import { SeoService } from '../../shared/seo/seo.service';
 
 @Component({
   selector: 'app-hobbies',
   imports: [CommonModule, LoadingSpinnerComponent, FontAwesomeModule],
-  providers: [ContentfulService, LoadingService],
+  providers: [ContentfulService, LoadingService, SeoService],
   templateUrl: './hobbies.component.html',
   styleUrl: './hobbies.component.scss',
 })
@@ -31,10 +32,16 @@ export class HobbiesComponent implements OnInit {
 
   constructor(
     private loadingService: LoadingService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document,
+    private seoService: SeoService,
     private contentfulService: ContentfulService
   ) {}
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
     this.loadingService.show();
 
     this.contentfulService

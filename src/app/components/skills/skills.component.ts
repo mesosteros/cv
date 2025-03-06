@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { SeoService } from '../../shared/seo/seo.service';
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { TechnicalSkillsComponent } from '../technical-skills/technical-skills.component';
 import { SoftSkillsComponent } from '../soft-skills/soft-skills.component';
 import { LanguageSkillsComponent } from '../language-skills/language-skills.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { SeoService } from '../../shared/seo/seo.service';
 
 @Component({
   selector: 'app-skills',
@@ -17,7 +17,7 @@ import { ContentfulService } from '../../shared/contentful/contentful.service';
     LanguageSkillsComponent,
     LoadingSpinnerComponent,
   ],
-  providers: [SeoService, ContentfulService],
+  providers: [ContentfulService, SeoService],
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.scss',
 })
@@ -29,22 +29,20 @@ export class SkillsComponent implements OnInit {
   public softSkillsData: any = [];
 
   constructor(
-    private seoService: SeoService,
-    @Inject(PLATFORM_ID) private platformId: Object,
     private loadingService: LoadingService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document,
+    private seoService: SeoService,
     private contentfulService: ContentfulService
   ) {}
 
   ngOnInit() {
-    if (isPlatformServer(this.platformId)) {
-      this.seoService.updateMetaTags(
-        'Skills',
-        'Front-End Tech Manager | Angular Expert | Delivering innovative web solutions',
-        'path/to/your/image.png'
-      );
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
     }
     this.fetchData();
   }
+
   private async fetchData() {
     this.loadingService.show();
     try {

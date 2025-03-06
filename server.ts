@@ -60,6 +60,7 @@ export function app(): express.Express {
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
+    const canonicalUrl = `${protocol}://${headers.host}${originalUrl}`;
 
     commonEngine
       .render({
@@ -69,7 +70,13 @@ export function app(): express.Express {
         publicPath: browserDistFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
-      .then((html) => res.send(html))
+      .then((html) => {
+        const modifiedHtml = html.replace(
+          '<head>',
+          `<head><link rel="canonical" href="${canonicalUrl}" />`
+        );
+        return res.send(modifiedHtml);
+      })
       .catch((err) => next(err));
   });
 

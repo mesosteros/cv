@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { SeoService } from '../../shared/seo/seo.service';
 import { CommonModule, isPlatformServer } from '@angular/common';
 import { TechnicalSkillsComponent } from '../technical-skills/technical-skills.component';

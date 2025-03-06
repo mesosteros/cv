@@ -71,11 +71,11 @@ export function app(): express.Express {
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
       .then((html) => {
-        const modifiedHtml = html.replace(
-          '<head>',
-          `<head><link rel="canonical" href="${canonicalUrl}" />`
+        html = html.replace(
+          /<link rel="canonical" href="[^"]*">/i,
+          `<link rel="canonical" href="${canonicalUrl}" />`
         );
-        return res.send(modifiedHtml);
+        return res.send(html);
       })
       .catch((err) => next(err));
   });

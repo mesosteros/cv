@@ -13,7 +13,6 @@ import { LanguageSkillsComponent } from '../language-skills/language-skills.comp
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
-import { CloudData } from 'angular-tag-cloud-module';
 
 @Component({
   selector: 'app-skills',
@@ -27,7 +26,6 @@ import { CloudData } from 'angular-tag-cloud-module';
   providers: [SeoService, ContentfulService],
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SkillsComponent implements OnInit {
   loadedData = 0;
@@ -35,7 +33,6 @@ export class SkillsComponent implements OnInit {
   public techSkillsData: any = [];
   public languageSkillsData: any = [];
   public softSkillsData: any = [];
-  public wordCloudData: CloudData[] = [];
 
   constructor(
     private seoService: SeoService,
@@ -52,7 +49,6 @@ export class SkillsComponent implements OnInit {
         'path/to/your/image.png'
       );
     }
-
     this.fetchData();
   }
   private async fetchData() {
@@ -92,16 +88,5 @@ export class SkillsComponent implements OnInit {
 
   private getSoftSkills(softData: any) {
     this.softSkillsData = softData.items.map((skill: any) => skill.fields);
-    this.wordCloudData = this.softSkillsData.map((skill: any) => {
-      const skillCloud = {
-        text: skill.title,
-        weight: skill.weight,
-        tooltip: skill.tooltip ? skill.tooltip : null,
-        color: skill.color
-          ? skill.color
-          : '#' + Math.floor(Math.random() * 16777215).toString(16),
-      };
-      return skillCloud;
-    });
   }
 }

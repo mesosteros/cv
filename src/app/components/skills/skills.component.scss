@@ -29,12 +29,12 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding-top: 2rem;
+    padding-top: 0.5rem;
     @media screen and (max-width: 1919px) {
       flex-direction: column;
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 700px) {
       justify-content: center;
       align-items: center;
     }
@@ -42,7 +42,7 @@
 
   &-language {
     width: 50%;
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 700px) {
       width: 100%;
       display: flex;
       justify-content: center;
@@ -52,12 +52,12 @@
 
   &-soft {
     &-cloud {
-      width: 50%;
-      @media screen and (max-width: 1439px) {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      width: 100%;
+      padding-top: 2rem;
+      flex-wrap: wrap;
+
+      @media screen and (min-width: 1900px) {
+        width: 50%;
       }
     }
   }

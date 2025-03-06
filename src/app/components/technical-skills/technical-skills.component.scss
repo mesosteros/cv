@@ -15,6 +15,10 @@
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
     }
+    @media screen and (max-width: 370px) {
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
 
   &-card {
@@ -30,6 +34,10 @@
       &--right {
         justify-content: flex-start !important;
       }
+    }
+    @media screen and (max-width: 370px) {
+      justify-content: center;
+      align-items: center;
     }
   }
 

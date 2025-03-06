@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
 
 @Component({
   selector: 'app-language-skills',
   imports: [CommonModule],
-  providers: [ContentfulService],
+  providers: [],
   templateUrl: './language-skills.component.html',
   styleUrl: './language-skills.component.scss',
 })

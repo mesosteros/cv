@@ -33,8 +33,7 @@ export function app(): express.Express {
 
     routes.forEach((route) => {
       const url = root.ele('url');
-      url.ele('loc', `https://carlosesantos.com${route}`);
-      // You can add more elements like <changefreq> and <priority> here if needed
+      url.ele('loc', `https://www.carlosesantos.com${route}`);
     });
 
     res.header('Content-Type', 'application/xml');
@@ -49,8 +48,6 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
   server.get(
     '**',

@@ -30,6 +30,7 @@
     "@fortawesome/angular-fontawesome": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@frxjs/ngx-timeline": "^18.0.7",
     "angular-tag-cloud-module": "^17.0.1",
     "contentful": "^11.2.1",

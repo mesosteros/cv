@@ -15,11 +15,11 @@ export class SeoService {
     @Inject(DOCUMENT) private document: Document
   ) {}
 
-  updateMetaTags(location: string) {
-    // Open Graph Meta Tags
+  updateCanonicalURLserver(url: string) {
+    this.meta.updateTag({ rel: 'canonical', href: url });
     this.meta.addTag({
       property: 'og:url',
-      content: location,
+      content: url,
     });
   }
 

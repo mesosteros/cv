@@ -64,7 +64,7 @@ export class HobbiesComponent implements OnInit {
       if (isPlatformBrowser(this.platformId)) {
         this.seoService.setCanonicalURL(this.document.URL);
       }
-      this.meta.updateTag({ rel: 'canonical', href: url });
+      this.seoService.updateCanonicalURLserver(url);
     }
     this.loadingService.show();
 

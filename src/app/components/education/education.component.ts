@@ -60,7 +60,7 @@ export class EducationComponent implements OnInit {
         this.seoService.CANONICAL_URL_KEY,
         canonicalUrl
       );
-      this.meta.updateTag({ rel: 'canonical', href: url });
+      this.seoService.updateCanonicalURLserver(url);
     }
     if (isPlatformBrowser(this.platformId)) {
       this.seoService.setCanonicalURL(this.document.URL);

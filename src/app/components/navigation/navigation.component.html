@@ -2,7 +2,13 @@
   class="navigation"
   [ngClass]="mobileMode ? 'navigation--mobile' : 'navigation--desktop'"
 >
-  <a mat-button routerLink="/" routerLinkActive="router-link-active">Home</a>
+  <a
+    *ngIf="mobileMode"
+    class="navigation-navbar-logo"
+    routerLink="/"
+    routerLinkActive="router-link-active"
+    >CARLOS SANTOS</a
+  >
   <a mat-button routerLink="/professional" routerLinkActive="router-link-active"
     >Professional Experience</a
   >

@@ -33,4 +33,9 @@ footer {
   overflow-y: auto; /* Enable vertical scrolling */
   padding: 1rem;
   padding-top: 80px;
+  padding-bottom: 60px;
+
+  @media screen and (max-width: 767px) {
+    padding-top: 1rem;
+  }
 }

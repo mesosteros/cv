@@ -1,5 +1,17 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  CommonModule,
+  DOCUMENT,
+  isPlatformBrowser,
+  isPlatformServer,
+} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
   NgxDateFormat,
@@ -11,6 +23,10 @@ import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { TimelineComponent } from '../timeline/timeline.component';
 import { SeoService } from '../../shared/seo/seo.service';
+import { environment } from '../../../environments/environment';
+import { Meta } from '@angular/platform-browser';
+
+const canonicalUrl = `${environment.hostUrl}/education`;
 
 @Component({
   selector: 'app-education',
@@ -19,7 +35,7 @@ import { SeoService } from '../../shared/seo/seo.service';
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',
 })
-export class EducationComponent implements OnInit {
+export class EducationComponent implements OnInit, AfterViewInit {
   public isLoading: boolean = true;
   public mobileMode = false;
   public educationData: any;
@@ -34,12 +50,19 @@ export class EducationComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document,
     private seoService: SeoService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private state: TransferState,
+    private meta: Meta
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
+    if (isPlatformServer(this.platformId)) {
+      const url: any = this.state.get(
+        this.seoService.CANONICAL_URL_KEY,
+        canonicalUrl
+      );
+      this.seoService.updateTitleServer('Education');
+      this.seoService.updateCanonicalURLserver(url);
     }
     this.loadingService.show();
 
@@ -95,6 +118,13 @@ export class EducationComponent implements OnInit {
         this.loadingService.hide();
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Education');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
   }
 
   handleClick(event: any) {

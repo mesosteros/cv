@@ -1,5 +1,17 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  CommonModule,
+  DOCUMENT,
+  isPlatformBrowser,
+  isPlatformServer,
+} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
   NgxDateFormat,
@@ -11,6 +23,10 @@ import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { TimelineComponent } from '../timeline/timeline.component';
 import { SeoService } from '../../shared/seo/seo.service';
+import { Meta } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
+
+const canonicalUrl = `${environment.hostUrl}/professional`;
 
 @Component({
   selector: 'app-professional',
@@ -19,7 +35,7 @@ import { SeoService } from '../../shared/seo/seo.service';
   templateUrl: './professional.component.html',
   styleUrl: './professional.component.scss',
 })
-export class ProfessionalComponent implements OnInit {
+export class ProfessionalComponent implements OnInit, AfterViewInit {
   public isLoading: boolean = true;
   public professionalData: any;
   public events: NgxTimelineEvent[] = [];
@@ -32,13 +48,21 @@ export class ProfessionalComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private seoService: SeoService,
     private contentfulService: ContentfulService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private state: TransferState,
+    private meta: Meta
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
+    if (isPlatformServer(this.platformId)) {
+      const url: any = this.state.get(
+        this.seoService.CANONICAL_URL_KEY,
+        canonicalUrl
+      );
+      this.seoService.updateTitleServer('Experience');
+      this.seoService.updateCanonicalURLserver(url);
     }
+
     this.loadingService.show();
 
     this.contentfulService
@@ -93,6 +117,13 @@ export class ProfessionalComponent implements OnInit {
         this.loadingService.hide();
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Experience');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
   }
 
   handleClick(event: any) {

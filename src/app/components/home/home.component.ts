@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnInit,
@@ -20,7 +21,7 @@ const canonicalUrl = `${environment.hostUrl}`;
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     private seoService: SeoService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -35,8 +36,13 @@ export class HomeComponent implements OnInit {
         this.seoService.CANONICAL_URL_KEY,
         canonicalUrl
       );
+      this.seoService.updateTitleServer('Home');
       this.seoService.updateCanonicalURLserver(url);
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Home');
     if (isPlatformBrowser(this.platformId)) {
       this.seoService.setCanonicalURL(this.document.URL);
     }

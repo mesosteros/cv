@@ -5,6 +5,7 @@ import {
   isPlatformServer,
 } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnInit,
@@ -34,7 +35,7 @@ const canonicalUrl = `${environment.hostUrl}/professional`;
   templateUrl: './professional.component.html',
   styleUrl: './professional.component.scss',
 })
-export class ProfessionalComponent implements OnInit {
+export class ProfessionalComponent implements OnInit, AfterViewInit {
   public isLoading: boolean = true;
   public professionalData: any;
   public events: NgxTimelineEvent[] = [];
@@ -58,11 +59,10 @@ export class ProfessionalComponent implements OnInit {
         this.seoService.CANONICAL_URL_KEY,
         canonicalUrl
       );
+      this.seoService.updateTitleServer('Experience');
       this.seoService.updateCanonicalURLserver(url);
     }
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
-    }
+
     this.loadingService.show();
 
     this.contentfulService
@@ -117,6 +117,13 @@ export class ProfessionalComponent implements OnInit {
         this.loadingService.hide();
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Experience');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
   }
 
   handleClick(event: any) {

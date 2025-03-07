@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnInit,
@@ -36,7 +37,7 @@ const canonicalUrl = `${environment.hostUrl}/hobbies`;
   templateUrl: './hobbies.component.html',
   styleUrl: './hobbies.component.scss',
 })
-export class HobbiesComponent implements OnInit {
+export class HobbiesComponent implements OnInit, AfterViewInit {
   public isLoading: boolean = true;
   public faDAndD = faDAndD;
   public faGamepad = faGamepad;
@@ -64,6 +65,7 @@ export class HobbiesComponent implements OnInit {
       if (isPlatformBrowser(this.platformId)) {
         this.seoService.setCanonicalURL(this.document.URL);
       }
+      this.seoService.updateTitleServer('Hobbies');
       this.seoService.updateCanonicalURLserver(url);
     }
     this.loadingService.show();
@@ -86,6 +88,13 @@ export class HobbiesComponent implements OnInit {
         this.loadingService.hide();
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Hobbies');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
   }
 
   private getMatchingIcon(hobbyName: string) {

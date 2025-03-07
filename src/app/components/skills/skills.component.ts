@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnInit,
@@ -36,7 +37,7 @@ const canonicalUrl = `${environment.hostUrl}/skills`;
   templateUrl: './skills.component.html',
   styleUrl: './skills.component.scss',
 })
-export class SkillsComponent implements OnInit {
+export class SkillsComponent implements OnInit, AfterViewInit {
   loadedData = 0;
   public isLoading: boolean = true;
   public techSkillsData: any = [];
@@ -59,12 +60,18 @@ export class SkillsComponent implements OnInit {
         this.seoService.CANONICAL_URL_KEY,
         canonicalUrl
       );
+      this.seoService.updateTitleServer('Skills');
       this.seoService.updateCanonicalURLserver(url);
     }
+
+    this.fetchData();
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Skills');
     if (isPlatformBrowser(this.platformId)) {
       this.seoService.setCanonicalURL(this.document.URL);
     }
-    this.fetchData();
   }
 
   private async fetchData() {

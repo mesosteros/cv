@@ -5,6 +5,7 @@ import {
   isPlatformServer,
 } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnInit,
@@ -34,7 +35,7 @@ const canonicalUrl = `${environment.hostUrl}/education`;
   templateUrl: './education.component.html',
   styleUrl: './education.component.scss',
 })
-export class EducationComponent implements OnInit {
+export class EducationComponent implements OnInit, AfterViewInit {
   public isLoading: boolean = true;
   public mobileMode = false;
   public educationData: any;
@@ -60,10 +61,8 @@ export class EducationComponent implements OnInit {
         this.seoService.CANONICAL_URL_KEY,
         canonicalUrl
       );
+      this.seoService.updateTitleServer('Education');
       this.seoService.updateCanonicalURLserver(url);
-    }
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
     }
     this.loadingService.show();
 
@@ -119,6 +118,13 @@ export class EducationComponent implements OnInit {
         this.loadingService.hide();
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Education');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
   }
 
   handleClick(event: any) {

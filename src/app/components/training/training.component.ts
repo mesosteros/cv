@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Inject,
   OnInit,
@@ -27,7 +28,7 @@ const canonicalUrl = `${environment.hostUrl}/training`;
   templateUrl: './training.component.html',
   styleUrl: './training.component.scss',
 })
-export class TrainingComponent implements OnInit {
+export class TrainingComponent implements OnInit, AfterViewInit {
   public isLoading: boolean = true;
   public trainingData: any = [];
 
@@ -47,10 +48,8 @@ export class TrainingComponent implements OnInit {
         this.seoService.CANONICAL_URL_KEY,
         canonicalUrl
       );
+      this.seoService.updateTitleServer('Training and Certifications');
       this.seoService.updateCanonicalURLserver(url);
-    }
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
     }
 
     this.loadingService.show();
@@ -69,5 +68,12 @@ export class TrainingComponent implements OnInit {
         this.loadingService.hide();
         this.isLoading = false;
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Training and Certifications');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
   }
 }

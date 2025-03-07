@@ -1,5 +1,5 @@
 import { Inject, Injectable, PLATFORM_ID, makeStateKey } from '@angular/core';
-import { Meta } from '@angular/platform-browser';
+import { Meta, Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
@@ -10,6 +10,7 @@ export class SeoService {
   CANONICAL_URL_KEY = makeStateKey<string>('canonicalUrl');
 
   constructor(
+    private title: Title,
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document
@@ -20,6 +21,16 @@ export class SeoService {
     this.meta.addTag({
       property: 'og:url',
       content: url,
+    });
+  }
+
+  updateTitleServer(titleSuffix: string) {
+    const defaultTitle =
+      'Carlos Santos - Front-End Tech Manager | Angular Expert';
+    this.title.setTitle(`${defaultTitle} | ${titleSuffix}`);
+    this.meta.addTag({
+      property: 'og:title',
+      content: `${defaultTitle} | ${titleSuffix}`,
     });
   }
 

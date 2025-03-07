@@ -1,5 +1,16 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import {
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
+import {
+  CommonModule,
+  DOCUMENT,
+  isPlatformBrowser,
+  isPlatformServer,
+} from '@angular/common';
 import { TechnicalSkillsComponent } from '../technical-skills/technical-skills.component';
 import { SoftSkillsComponent } from '../soft-skills/soft-skills.component';
 import { LanguageSkillsComponent } from '../language-skills/language-skills.component';
@@ -7,6 +18,10 @@ import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.comp
 import { LoadingService } from '../../shared/loading/loading.service';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { SeoService } from '../../shared/seo/seo.service';
+import { Meta } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
+
+const canonicalUrl = `${environment.hostUrl}/skills`;
 
 @Component({
   selector: 'app-skills',
@@ -33,10 +48,19 @@ export class SkillsComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document,
     private seoService: SeoService,
-    private contentfulService: ContentfulService
+    private contentfulService: ContentfulService,
+    private state: TransferState,
+    private meta: Meta
   ) {}
 
   ngOnInit() {
+    if (isPlatformServer(this.platformId)) {
+      const url: any = this.state.get(
+        this.seoService.CANONICAL_URL_KEY,
+        canonicalUrl
+      );
+      this.meta.updateTag({ rel: 'canonical', href: url });
+    }
     if (isPlatformBrowser(this.platformId)) {
       this.seoService.setCanonicalURL(this.document.URL);
     }

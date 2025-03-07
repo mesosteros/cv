@@ -1,5 +1,16 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  CommonModule,
+  DOCUMENT,
+  isPlatformBrowser,
+  isPlatformServer,
+} from '@angular/common';
+import {
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
   NgxDateFormat,
@@ -11,6 +22,10 @@ import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { TimelineComponent } from '../timeline/timeline.component';
 import { SeoService } from '../../shared/seo/seo.service';
+import { Meta } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
+
+const canonicalUrl = `${environment.hostUrl}/professional`;
 
 @Component({
   selector: 'app-professional',
@@ -32,10 +47,19 @@ export class ProfessionalComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private seoService: SeoService,
     private contentfulService: ContentfulService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private state: TransferState,
+    private meta: Meta
   ) {}
 
   ngOnInit() {
+    if (isPlatformServer(this.platformId)) {
+      const url: any = this.state.get(
+        this.seoService.CANONICAL_URL_KEY,
+        canonicalUrl
+      );
+      this.meta.updateTag({ rel: 'canonical', href: url });
+    }
     if (isPlatformBrowser(this.platformId)) {
       this.seoService.setCanonicalURL(this.document.URL);
     }

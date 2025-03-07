@@ -1,8 +1,19 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { LoadingService } from '../../shared/loading/loading.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import {
+  CommonModule,
+  DOCUMENT,
+  isPlatformBrowser,
+  isPlatformServer,
+} from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDAndD } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -13,6 +24,10 @@ import {
   faBook,
 } from '@fortawesome/free-solid-svg-icons';
 import { SeoService } from '../../shared/seo/seo.service';
+import { Meta } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
+
+const canonicalUrl = `${environment.hostUrl}/hobbies`;
 
 @Component({
   selector: 'app-hobbies',
@@ -35,12 +50,21 @@ export class HobbiesComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document,
     private seoService: SeoService,
-    private contentfulService: ContentfulService
+    private contentfulService: ContentfulService,
+    private state: TransferState,
+    private meta: Meta
   ) {}
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
+    if (isPlatformServer(this.platformId)) {
+      const url: any = this.state.get(
+        this.seoService.CANONICAL_URL_KEY,
+        canonicalUrl
+      );
+      if (isPlatformBrowser(this.platformId)) {
+        this.seoService.setCanonicalURL(this.document.URL);
+      }
+      this.meta.updateTag({ rel: 'canonical', href: url });
     }
     this.loadingService.show();
 

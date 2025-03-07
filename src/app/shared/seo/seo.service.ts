@@ -1,4 +1,4 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID, makeStateKey } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
@@ -7,6 +7,8 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
   providedIn: 'root',
 })
 export class SeoService {
+  CANONICAL_URL_KEY = makeStateKey<string>('canonicalUrl');
+
   constructor(
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: Object,

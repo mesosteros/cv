@@ -1,9 +1,8 @@
-name: Deploy Angular SSR
+name: Deploy to Digital Ocean
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
@@ -13,24 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Angular SSR
-        run: |
-          echo "VITE_CONTENTFUL_ACCESS_TOKEN=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}" > .env.production
-          npm run build:ssr
-
-      - name: Deploy to DigitalOcean
-        uses: appleboy/ssh-action@v0.1.10
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DIGITALOCEAN_HOST }}
-          username: root
+          username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
           script: |
             cd /var/www/cv

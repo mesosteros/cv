@@ -6,5 +6,5 @@ export const environment = {
     spaceId: '1hnpyxq3n4t6',
     token: CONTENTFUL_ACCESS_TOKEN,
   },
-  hostUrl: 'https://localhost:4200/',
+  hostUrl: 'https://localhost:4200',
 };

@@ -50,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
       .observe([
         Breakpoints.HandsetPortrait,
         Breakpoints.WebPortrait,
+        Breakpoints.Small,
         Breakpoints.HandsetLandscape,
         Breakpoints.TabletLandscape,
       ])

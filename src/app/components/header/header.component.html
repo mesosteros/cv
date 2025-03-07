@@ -1,7 +1,15 @@
 <header class="header">
+  <div class="header-navbar">
     <mat-toolbar color="primary">
-        <mat-toolbar-row class="header-navigation">
-            <app-navigation [hideSideMenu]="true"></app-navigation>
-        </mat-toolbar-row>
+      <mat-toolbar-row class="header-navbar-navigation">
+        <a
+          class="header-navbar-logo"
+          routerLink="/"
+          routerLinkActive="router-link-active"
+          >CARLOS SANTOS</a
+        >
+        <app-navigation [hideSideMenu]="true"></app-navigation>
+      </mat-toolbar-row>
     </mat-toolbar>
+  </div>
 </header>

@@ -26,6 +26,13 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
           script: |
             cd /var/www/cv
+            mkdir -p server-config
+            echo "module.exports = {
+              spaceId: '${{ secrets.CONTENTFUL_SPACE_ID }}',
+              accessToken: '${{ secrets.CONTENTFUL_ACCESS_TOKEN }}',
+            };" > server-config/contentful.js
+            chmod 600 server-config/contentful.js
+            chown -R deploy:deploy server-config
             npm ci
             npm run build:ssr
             pm2 restart cv

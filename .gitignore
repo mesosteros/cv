@@ -3,6 +3,7 @@
 # Secrets so API secrets aren't committed
 secrets.ts
 .env
+/server-config/
 
 # Compiled output
 /dist

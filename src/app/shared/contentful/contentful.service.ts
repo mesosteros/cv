@@ -1,66 +1,49 @@
-import {
-  Inject,
-  Injectable,
-  makeStateKey,
-  PLATFORM_ID,
-  TransferState,
-} from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { createClient, ContentfulClientApi } from 'contentful';
 import { environment } from '../../../environments/environment';
 import { isPlatformServer } from '@angular/common';
 
-const CONTENTFUL_DATA_KEY = makeStateKey<any>('contentfulData');
 @Injectable({
   providedIn: 'root',
 })
 export class ContentfulService {
-  private client: ContentfulClientApi<any>;
+  private client: ContentfulClientApi<any> = createClient({
+    space: environment.contentful.spaceId,
+    accessToken: environment.contentful.token,
+  });
 
-  constructor(
-    private transferState: TransferState,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    const accessToken: any = isPlatformServer(this.platformId)
-      ? process.env['CONTENTFUL_ACCESS_TOKEN']
-      : environment.contentful.token;
-
-    this.client = createClient({
-      space: environment.contentful.spaceId,
-      accessToken,
-    });
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (environment.production && isPlatformServer(this.platformId)) {
+      try {
+        // Server-side only
+        let serverConfig: any;
+        serverConfig = require('/var/www/cv/server-config/contentful.js');
+        this.client = createClient({
+          space: serverConfig.spaceId,
+          accessToken: serverConfig.accessToken,
+        });
+      } catch (e) {
+        console.error('Server config missing:', e);
+      }
+    } else {
+      this.client = createClient({
+        space: environment.contentful.spaceId,
+        accessToken: environment.contentful.token,
+      });
+    }
   }
 
   // retrieves content mapped to its data fields
-  async getEntry(entryId: string): Promise<any> {
-    const cachedData = this.transferState.get(CONTENTFUL_DATA_KEY, null);
-
-    if (cachedData) {
-      return cachedData; // Client-side: use cached data
-    }
-
-    const entry = await this.client.getEntry(entryId);
-
-    if (isPlatformServer(this.platformId)) {
-      this.transferState.set(CONTENTFUL_DATA_KEY, entry); // Server-side cache
-    }
-
+  getEntry(entryId: string): Promise<any> {
+    const entry = this.client.getEntry(entryId);
     return entry;
   }
 
   // retrieves content mapped to its data fields
-  async getEntries(contentType: string): Promise<any> {
-    const cachedData = this.transferState.get(CONTENTFUL_DATA_KEY, null);
-
-    if (cachedData) {
-      return cachedData; // Client-side: use cached data
-    }
-
-    const entries = await this.client.getEntries({ content_type: contentType });
-
-    if (isPlatformServer(this.platformId)) {
-      this.transferState.set(CONTENTFUL_DATA_KEY, entries); // Server-side cache
-    }
-
+  getEntries(contentType: string): Promise<any> {
+    const entries = this.client.getEntries(
+      Object.assign({ content_type: contentType })
+    );
     return entries;
   }
 }

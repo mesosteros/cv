@@ -8,8 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:cv": "node dist/cv/server/server.mjs",
-    "build:ssr": "ng build --configuration production && ng run cv:build:production",
-    "build:ssr:dev": "ng build --configuration development && ng run cv:build:development",
+    "build:ssr": "ng build --configuration production && ng run cv:build:production && node dist/cv/server/server.mjs",
+    "build:ssr:dev": "ng build --configuration development && ng run cv:build:development && node dist/cv/server/server.mjs",
     "local": "ng build --configuration development && ng run cv:build:development && node dist/cv/server/server.mjs"
   },
   "private": true,

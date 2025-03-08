@@ -10,29 +10,39 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Replace Contentful Secrets
-        run: |
-          sed -i "s/\${CONTENTFUL_SPACE_ID}/${{ secrets.CONTENTFUL_SPACE_ID }}/g" src/environments/environment.prod.ts
-          sed -i "s/\${CONTENTFUL_ACCESS_TOKEN}/${{ secrets.CONTENTFUL_ACCESS_TOKEN }}/g" src/environments/environment.prod.ts
-        shell: bash
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.DIGITALOCEAN_HOST }}
+          node-version: 20
+
+      - name: Replace Environment Placeholders
+        run: |
+          sed -i "s|CONTENTFUL_SPACE_ID|${{ secrets.CONTENTFUL_SPACE_ID }}|g" src/environments/environment.prod.ts
+          sed -i "s|CONTENTFUL_TOKEN|${{ secrets.CONTENTFUL_TOKEN }}|g" src/environments/environment.prod.ts
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build SSR App
+        run: npm run build:ssr
+
+      - name: Deploy to Droplet
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
+          source: "dist/"
+          target: "/var/www/cv"
+
+      - name: Restart PM2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/cv
-            mkdir -p server-config
-            echo "module.exports = {
-              spaceId: '${{ secrets.CONTENTFUL_SPACE_ID }}',
-              accessToken: '${{ secrets.CONTENTFUL_ACCESS_TOKEN }}',
-            };" > server-config/contentful.js
-            chmod 600 server-config/contentful.js
-            chown -R deploy:deploy server-config
-            npm ci
-            npm run build:ssr
-            pm2 restart cv
+            pm2 reload ecosystem.config.js --env production

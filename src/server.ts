@@ -8,6 +8,8 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import xmlbuilder from 'xmlbuilder';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');

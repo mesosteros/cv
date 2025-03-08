@@ -1,9 +1,9 @@
-import { CONTENTFUL_ACCESS_TOKEN } from './secrets';
+import { CONTENTFUL_ACCESS_TOKEN, CONTENTFUL_SPACE_ID } from './secrets';
 
 export const environment = {
   production: false,
   contentful: {
-    spaceId: '1hnpyxq3n4t6',
+    spaceId: CONTENTFUL_SPACE_ID,
     token: CONTENTFUL_ACCESS_TOKEN,
   },
   hostUrl: 'https://localhost:4200',

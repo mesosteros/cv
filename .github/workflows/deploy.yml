@@ -17,10 +17,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Replace Environment Placeholders
+      - name: Create secrets.ts
         run: |
-          sed -i "s|CONTENTFUL_SPACE_ID|${{ secrets.CONTENTFUL_SPACE_ID }}|g" src/environments/environment.prod.ts
-          sed -i "s|CONTENTFUL_TOKEN|${{ secrets.CONTENTFUL_TOKEN }}|g" src/environments/environment.prod.ts
+          mkdir -p src/environments
+          echo "export const CONTENTFUL_SPACE_ID = '${{ secrets.CONTENTFUL_SPACE_ID }}';" > src/environments/secrets.ts
+          echo "export const CONTENTFUL_ACCESS_TOKEN = '${{ secrets.CONTENTFUL_ACCESS_TOKEN }}';" >> src/environments/secrets.ts
 
       - name: Install Dependencies
         run: npm ci
@@ -45,4 +46,4 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
           script: |
             cd /var/www/cv
-            pm2 reload ecosystem.config.js --env production
+            pm2 restart cv

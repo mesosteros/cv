@@ -21,9 +21,9 @@ jobs:
           script: |
             cd /var/www/cv
             git pull origin main
-            touch .env
-            chmod 600 .env
-            chown ${{ secrets.DO_USERNAME }}:${{ secrets.DO_USERNAME }} .env
+            sudo touch .env
+            sudo chmod 600 .env
+            sudo chown deploy:deploy .env
             echo "CONTENTFUL_SPACE_ID=${{ secrets.CONTENTFUL_SPACE_ID }}" >> .env
             echo "CONTENTFUL_ACCESS_TOKEN=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}" >> .env
             npm ci

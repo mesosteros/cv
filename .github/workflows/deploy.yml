@@ -12,6 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Replace Contentful Secrets
+        run: |
+          sed -i "s/\${CONTENTFUL_SPACE_ID}/${{ secrets.CONTENTFUL_SPACE_ID }}/g" src/environments/environment.prod.ts
+          sed -i "s/\${CONTENTFUL_ACCESS_TOKEN}/${{ secrets.CONTENTFUL_ACCESS_TOKEN }}/g" src/environments/environment.prod.ts
+        shell: bash
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -20,11 +26,6 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
           script: |
             cd /var/www/cv
-            sudo touch .env
-            sudo chmod 600 .env
-            sudo chown deploy:deploy .env
-            echo "CONTENTFUL_SPACE_ID=${{ secrets.CONTENTFUL_SPACE_ID }}" > .env
-            echo "CONTENTFUL_ACCESS_TOKEN=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}" >> .env
             npm ci
             npm run build:ssr
-            pm2 restart ecosystem.config.js
+            pm2 restart cv

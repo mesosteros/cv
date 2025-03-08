@@ -8,7 +8,17 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import xmlbuilder from 'xmlbuilder';
-import 'dotenv/config';
+import { existsSync } from 'fs';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '/var/www/cv/.env' });
+
+// Load .env from absolute path
+const envPath = '/var/www/cv/.env';
+if (existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+} else {
+  console.error('⚠️ .env file not found at', envPath);
+}
 
 const contentfulSpaceId = process.env['CONTENTFUL_SPACE_ID'];
 const contentfulToken = process.env['CONTENTFUL_TOKEN'];

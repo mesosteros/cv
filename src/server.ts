@@ -9,8 +9,10 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import xmlbuilder from 'xmlbuilder';
 import * as dotenv from 'dotenv';
-dotenv.config({ path: '/var/www/cv/.env' });
 
+dotenv.config({ path: resolve(__dirname, '../.env') });
+console.log('Contentful Space ID:', process.env['CONTENTFUL_SPACE_ID']);
+console.log('Contentful Token:', process.env['CONTENTFUL_ACCESS_TOKEN']);
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 

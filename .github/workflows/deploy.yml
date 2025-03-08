@@ -20,7 +20,6 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
           script: |
             cd /var/www/cv
-            git pull origin main
             sudo touch .env
             sudo chmod 600 .env
             sudo chown deploy:deploy .env
@@ -28,4 +27,4 @@ jobs:
             echo "CONTENTFUL_ACCESS_TOKEN=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}" >> .env
             npm ci
             npm run build:ssr
-            pm2 restart cv
+            pm2 restart ecosystem.config.js

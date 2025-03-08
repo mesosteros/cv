@@ -4,7 +4,7 @@ import { provideServerRoutesConfig } from '@angular/ssr';
 import { appConfig } from './app.config';
 import { serverRoutes } from './app.routes.server';
 import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '/var/www/cv/.env' });
 
 const serverConfig: ApplicationConfig = {
   providers: [

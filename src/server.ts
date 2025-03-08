@@ -9,7 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import xmlbuilder from 'xmlbuilder';
 import * as dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: '/var/www/cv/.env' });
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');

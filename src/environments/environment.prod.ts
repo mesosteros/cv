@@ -1,5 +1,3 @@
-import { CONTENTFUL_ACCESS_TOKEN } from './secrets';
-
 export const environment = {
   production: true,
   contentful: {

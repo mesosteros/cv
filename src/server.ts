@@ -94,8 +94,15 @@ app.use('/**', (req, res, next) => {
  */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
+  });
+
+  process.on('SIGINT', () => {
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
   });
 }
 

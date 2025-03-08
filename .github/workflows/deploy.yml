@@ -46,5 +46,4 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_PRIVATE_KEY }}
           script: |
             cd /var/www/cv/dist/cv/server
-            forever stop server.mjs
-            forever start server.mjs
+            pm2 restart ecosystem.config.js

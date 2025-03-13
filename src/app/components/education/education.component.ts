@@ -23,8 +23,8 @@ import {
 import { environment } from '../../../environments/environment';
 import { ContentfulService } from '../../shared/contentful/contentful.service';
 import { SeoService } from '../../shared/seo/seo.service';
-import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { TimelineComponent } from '../../shared/timeline/timeline.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 const canonicalUrl = `${environment.hostUrl}/education`;
 

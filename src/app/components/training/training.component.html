@@ -1,16 +1,16 @@
-<app-loading-spinner
-  *ngIf="isLoading"
-  [message]="'Loading content...'"
-  mode="fullscreen"
->
-</app-loading-spinner>
-
 <div class="training">
   <div class="training-header">
     <h1>Trainings and Certifications</h1>
   </div>
   <br />
-  <div class="training-group-container">
+  <app-loading-spinner
+    *ngIf="loading()"
+    [message]="'Loading...'"
+    mode="fullscreen"
+  >
+  </app-loading-spinner>
+  <div *ngIf="error()">Error loading data.</div>
+  <div class="training-group-container" *ngIf="trainingData">
     <div class="training-group" *ngFor="let trainingGroup of trainingData">
       <h2>{{ trainingGroup.trainingGroup }}</h2>
       <ul class="training-group-list">

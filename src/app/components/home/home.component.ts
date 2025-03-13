@@ -1,3 +1,4 @@
+import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -6,11 +7,9 @@ import {
   PLATFORM_ID,
   TransferState,
 } from '@angular/core';
-import { IntroComponent } from '../intro/intro.component';
-import { SeoService } from '../../shared/seo/seo.service';
-import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Meta } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { SeoService } from '../../shared/seo/seo.service';
+import { IntroComponent } from '../intro/intro.component';
 
 const canonicalUrl = `${environment.hostUrl}`;
 
@@ -26,8 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private seoService: SeoService,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document,
-    private state: TransferState,
-    private meta: Meta
+    private state: TransferState
   ) {}
 
   ngOnInit() {

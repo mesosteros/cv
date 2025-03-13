@@ -11,6 +11,8 @@ import {
   OnInit,
   PLATFORM_ID,
   TransferState,
+  effect,
+  signal,
 } from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
@@ -18,13 +20,11 @@ import {
   NgxTimelineEvent,
   NgxTimelineEventChangeSide,
 } from '@frxjs/ngx-timeline';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
-import { LoadingService } from '../../shared/loading/loading.service';
-import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-import { TimelineComponent } from '../timeline/timeline.component';
-import { SeoService } from '../../shared/seo/seo.service';
-import { Meta } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { SeoService } from '../../shared/seo/seo.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { TimelineComponent } from '../../shared/timeline/timeline.component';
 
 const canonicalUrl = `${environment.hostUrl}/professional`;
 
@@ -36,7 +36,8 @@ const canonicalUrl = `${environment.hostUrl}/professional`;
   styleUrl: './professional.component.scss',
 })
 export class ProfessionalComponent implements OnInit, AfterViewInit {
-  public isLoading: boolean = true;
+  public loading = signal(false);
+  public error = signal(false);
   public professionalData: any;
   public events: NgxTimelineEvent[] = [];
   public timelineSide: NgxTimelineEventChangeSide =
@@ -48,10 +49,14 @@ export class ProfessionalComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private seoService: SeoService,
     private contentfulService: ContentfulService,
-    private loadingService: LoadingService,
-    private state: TransferState,
-    private meta: Meta
-  ) {}
+    private state: TransferState
+  ) {
+    effect(() => {
+      if (this.error()) {
+        console.error('Contentful error');
+      }
+    });
+  }
 
   ngOnInit() {
     if (isPlatformServer(this.platformId)) {
@@ -62,9 +67,19 @@ export class ProfessionalComponent implements OnInit, AfterViewInit {
       this.seoService.updateTitleServer('Experience');
       this.seoService.updateCanonicalURLserver(url);
     }
+    this.fetchContent();
+  }
 
-    this.loadingService.show();
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Experience');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
+  }
 
+  private fetchContent() {
+    this.loading.set(true);
+    this.error.set(false);
     this.contentfulService
       .getEntries('landingPage')
       .then((data: any) => {
@@ -112,18 +127,13 @@ export class ProfessionalComponent implements OnInit, AfterViewInit {
         );
         this.events = events;
       })
-      .catch((error) => (this.professionalData = []))
+      .catch((error) => {
+        this.professionalData = [];
+        this.error.set(true);
+      })
       .finally(() => {
-        this.loadingService.hide();
-        this.isLoading = false;
+        this.loading.set(false);
       });
-  }
-
-  ngAfterViewInit(): void {
-    this.seoService.updateTitleServer('Experience');
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
-    }
   }
 
   handleClick(event: any) {
@@ -145,21 +155,5 @@ export class ProfessionalComponent implements OnInit, AfterViewInit {
 
   convertToHtml(text: any) {
     return documentToHtmlString(text);
-  }
-
-  private async getImage(wrapperId: string) {
-    this.loadingService.show();
-
-    return this.contentfulService
-      .getEntry(wrapperId)
-      .then((experienceImage: any) => {
-        this.loadingService.hide();
-        this.isLoading = false;
-        return {
-          altText: experienceImage.fields.altText,
-          url: experienceImage.fields.asset.fields.file.url,
-        };
-      })
-      .catch((error) => console.error('Error loading image: ', error));
   }
 }

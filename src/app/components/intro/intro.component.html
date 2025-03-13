@@ -6,17 +6,18 @@
   } as state"
 >
   <app-loading-spinner
-    *ngIf="isLoading"
-    [message]="'Loading content...'"
+    *ngIf="loading()"
+    [message]="'Loading...'"
     mode="fullscreen"
   >
   </app-loading-spinner>
   <div
-    *ngIf="!isLoading"
+    *ngIf="!loading() && introText"
     [ngClass]="{
-      'text--mobile': state.isMobile,
-      'text--desktop': state.isDesktop
+      'text text--mobile': state.isMobile,
+      'text text--desktop': state.isDesktop
     }"
     [innerHTML]="introText"
   ></div>
+  <div *ngIf="error()">Error loading data.</div>
 </div>

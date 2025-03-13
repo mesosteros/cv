@@ -1,7 +1,6 @@
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID, makeStateKey } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { environment } from '../../../environments/environment';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',

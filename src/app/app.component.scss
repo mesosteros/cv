@@ -19,6 +19,21 @@ footer {
   &-container {
     min-height: 100%;
   }
+
+  &-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    position: fixed;
+  }
+}
+
+.mobile-content-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  width: 100%;
+  position: fixed;
 }
 
 .main {
@@ -38,4 +53,19 @@ footer {
   @media screen and (max-width: 767px) {
     padding-top: 1rem;
   }
+}
+
+.hamburger {
+  margin: 0 !important;
+  z-index: 100;
+}
+
+.mat-drawer.mat-drawer-opened.mat-drawer-opened {
+  width: 100% !important;
+}
+
+app-navigation {
+  display: flex !important;
+  justify-content: center !important;
+  overflow: hidden;
 }

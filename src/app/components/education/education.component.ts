@@ -11,6 +11,8 @@ import {
   OnInit,
   PLATFORM_ID,
   TransferState,
+  effect,
+  signal,
 } from '@angular/core';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import {
@@ -18,13 +20,11 @@ import {
   NgxTimelineEvent,
   NgxTimelineEventChangeSide,
 } from '@frxjs/ngx-timeline';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
-import { LoadingService } from '../../shared/loading/loading.service';
-import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-import { TimelineComponent } from '../timeline/timeline.component';
-import { SeoService } from '../../shared/seo/seo.service';
 import { environment } from '../../../environments/environment';
-import { Meta } from '@angular/platform-browser';
+import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { SeoService } from '../../shared/seo/seo.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { TimelineComponent } from '../../shared/timeline/timeline.component';
 
 const canonicalUrl = `${environment.hostUrl}/education`;
 
@@ -36,24 +36,28 @@ const canonicalUrl = `${environment.hostUrl}/education`;
   styleUrl: './education.component.scss',
 })
 export class EducationComponent implements OnInit, AfterViewInit {
-  public isLoading: boolean = true;
   public mobileMode = false;
   public educationData: any;
   public events: NgxTimelineEvent[] = [];
   public timelineSide: NgxTimelineEventChangeSide =
     NgxTimelineEventChangeSide.ALL;
-
   public ngxDateFormat: NgxDateFormat = NgxDateFormat.MONTH_YEAR;
+  public loading = signal(false);
+  public error = signal(false);
 
   constructor(
     private contentfulService: ContentfulService,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document,
     private seoService: SeoService,
-    private loadingService: LoadingService,
-    private state: TransferState,
-    private meta: Meta
-  ) {}
+    private state: TransferState
+  ) {
+    effect(() => {
+      if (this.error()) {
+        console.error('Contentful error');
+      }
+    });
+  }
 
   ngOnInit() {
     if (isPlatformServer(this.platformId)) {
@@ -64,7 +68,19 @@ export class EducationComponent implements OnInit, AfterViewInit {
       this.seoService.updateTitleServer('Education');
       this.seoService.updateCanonicalURLserver(url);
     }
-    this.loadingService.show();
+    this.fetchContent();
+  }
+
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Education');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
+  }
+
+  private fetchContent() {
+    this.loading.set(true);
+    this.error.set(false);
 
     this.contentfulService
       .getEntries('landingPage')
@@ -113,18 +129,13 @@ export class EducationComponent implements OnInit, AfterViewInit {
         );
         this.events = events;
       })
-      .catch((error) => (this.educationData = []))
+      .catch((error) => {
+        this.educationData = [];
+        this.error.set(true);
+      })
       .finally(() => {
-        this.loadingService.hide();
-        this.isLoading = false;
+        this.loading.set(false);
       });
-  }
-
-  ngAfterViewInit(): void {
-    this.seoService.updateTitleServer('Education');
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
-    }
   }
 
   handleClick(event: any) {

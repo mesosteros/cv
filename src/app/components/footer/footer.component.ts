@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faLinkedin,
-  faGithub,
-  faTwitch,
   faBluesky,
+  faGithub,
+  faLinkedin,
+  faTwitch,
 } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-footer',
   imports: [FontAwesomeModule],
@@ -18,4 +19,5 @@ export class FooterComponent {
   public faGithub = faGithub;
   public faTwitch = faTwitch;
   public faBluesky = faBluesky;
+  public faEnvelope = faEnvelope;
 }

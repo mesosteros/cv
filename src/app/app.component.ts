@@ -7,10 +7,11 @@ import {
   OnInit,
   Renderer2,
   RendererFactory2,
+  ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { FooterComponent } from './components/footer/footer.component';
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
   hideSideMenu = true;
   private renderer = inject(Renderer2);
   private rendererFactory = inject(RendererFactory2);
+  @ViewChild('drawer') drawer!: MatDrawer;
 
   constructor(private responsive: BreakpointObserver) {
     afterNextRender(() => {
@@ -79,5 +81,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }`;
 
     this.renderer.appendChild(document.head, script);
+  }
+
+  toggleSideMenu() {
+    this.drawer.toggle();
   }
 }

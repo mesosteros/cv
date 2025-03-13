@@ -18,8 +18,8 @@
     height: 20px;
     border-radius: 5px;
     overflow: hidden;
-    flex-grow: 1; /* Allow skill-bar to take up available space */
-    margin-right: 10px; /* Add some space between bar and text */
+    flex-grow: 1;
+    margin-right: 10px;
     min-width: 260px;
 
     &--container {
@@ -33,7 +33,7 @@
     height: 100%;
     transition: width 0.5s ease;
     &--text {
-      font-size: 0.8em; /* Adjust font size as needed */
+      font-size: 0.8em;
     }
   }
 }

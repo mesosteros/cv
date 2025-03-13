@@ -1,23 +1,23 @@
 import {
+  CommonModule,
+  DOCUMENT,
+  isPlatformBrowser,
+  isPlatformServer,
+} from '@angular/common';
+import {
   AfterViewInit,
   Component,
   Inject,
   OnInit,
   PLATFORM_ID,
   TransferState,
+  effect,
+  signal,
 } from '@angular/core';
-import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-import { ContentfulService } from '../../shared/contentful/contentful.service';
-import { LoadingService } from '../../shared/loading/loading.service';
-import {
-  CommonModule,
-  DOCUMENT,
-  isPlatformBrowser,
-  isPlatformServer,
-} from '@angular/common';
-import { SeoService } from '../../shared/seo/seo.service';
-import { Meta } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { ContentfulService } from '../../shared/contentful/contentful.service';
+import { SeoService } from '../../shared/seo/seo.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 const canonicalUrl = `${environment.hostUrl}/training`;
 
@@ -29,18 +29,23 @@ const canonicalUrl = `${environment.hostUrl}/training`;
   styleUrl: './training.component.scss',
 })
 export class TrainingComponent implements OnInit, AfterViewInit {
-  public isLoading: boolean = true;
+  public loading = signal(false);
+  public error = signal(false);
   public trainingData: any = [];
 
   constructor(
-    private loadingService: LoadingService,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(DOCUMENT) private document: Document,
     private seoService: SeoService,
     private contentfulService: ContentfulService,
-    private state: TransferState,
-    private meta: Meta
-  ) {}
+    private state: TransferState
+  ) {
+    effect(() => {
+      if (this.error()) {
+        console.error('Contentful error');
+      }
+    });
+  }
 
   ngOnInit() {
     if (isPlatformServer(this.platformId)) {
@@ -51,9 +56,19 @@ export class TrainingComponent implements OnInit, AfterViewInit {
       this.seoService.updateTitleServer('Training and Certifications');
       this.seoService.updateCanonicalURLserver(url);
     }
+    this.fetchContent();
+  }
 
-    this.loadingService.show();
+  ngAfterViewInit(): void {
+    this.seoService.updateTitleServer('Training and Certifications');
+    if (isPlatformBrowser(this.platformId)) {
+      this.seoService.setCanonicalURL(this.document.URL);
+    }
+  }
 
+  private fetchContent() {
+    this.loading.set(true);
+    this.error.set(false);
     this.contentfulService
       .getEntries('training')
       .then((entries: any) => {
@@ -63,17 +78,12 @@ export class TrainingComponent implements OnInit, AfterViewInit {
             trainingA.trainingGroup.localeCompare(trainingB.trainingGroup)
           );
       })
-      .catch((error) => (this.trainingData = []))
+      .catch((error) => {
+        this.trainingData = [];
+        this.error.set(true);
+      })
       .finally(() => {
-        this.loadingService.hide();
-        this.isLoading = false;
+        this.loading.set(false);
       });
-  }
-
-  ngAfterViewInit(): void {
-    this.seoService.updateTitleServer('Training and Certifications');
-    if (isPlatformBrowser(this.platformId)) {
-      this.seoService.setCanonicalURL(this.document.URL);
-    }
   }
 }
